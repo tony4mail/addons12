@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    	<!-- Province -->
+    	<menuitem id="menu_localisation_fin" name="Localization" parent="account.menu_finance_configuration" sequence="5" groups="account.group_account_invoice"/>
+        <menuitem action="base.action_country" id="menu_country_partner" parent="menu_localisation_fin" sequence="1" groups="account.group_account_invoice"/>
+        <menuitem action="base.action_country_group" id="menu_country_group_fin" name="Country Group" parent="menu_localisation_fin" sequence="2" groups="account.group_account_invoice"/>
+        <menuitem action="base.action_country_state" id="menu_country_state_partner_fin" parent="menu_localisation_fin" sequence="3" groups="account.group_account_invoice"/>  	
+        <menuitem action="aos_l10n_id.action_kabupaten" id="menu_kabupaten_list_view" parent="menu_localisation_fin" sequence="4" groups="account.group_account_invoice"/>
+        <menuitem action="aos_l10n_id.action_kecamatan" id="menu_kecamatan_list_view" parent="menu_localisation_fin" sequence="5" groups="account.group_account_invoice"/>
+        <menuitem action="aos_l10n_id.action_kelurahan" id="menu_kelurahan_list_view" parent="menu_localisation_fin" sequence="6" groups="account.group_account_invoice"/>
+    
+    </data>
+</odoo>

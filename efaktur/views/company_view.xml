@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<odoo>
+	<data>
+		
+		<record id="view_company_form_efaktur" model="ir.ui.view">
+        	<field name="name">res.company.custom</field>
+			<field name="model">res.company</field>
+			<field name="inherit_id" ref="base.view_company_form" />
+			<field name="arch" type="xml">
+				<xpath expr="/form/sheet/notebook/page[1]/group[1]/group[1]/field" position="after">
+					<field name="code_transaction" placeholder="010"/>
+					<field name="npwp" placeholder="00.000.000.0-000.000"/>
+				</xpath>	
+				<field name="street2" position="after">      
+					<div class="address_format">						
+						<field name="blok" placeholder="Blok" style="width: 22%%"/>
+						<field name="nomor" placeholder="No." style="width: 22%%"/>
+	                    <field name="rt" placeholder="RT" style="width: 25%%"/>/
+	                    <field name="rw" placeholder="RW" style="width: 25%%"/>
+	                </div>
+	                <div class="address_additional_format">
+                        <field name="kelurahan_id" options='{"no_open": True, "no_create": True}' placeholder="Kelurahan" style="width: 33%%"/>
+                        <field name="kecamatan_id" options='{"no_open": True, "no_create": True}' placeholder="Kecamatan" style="width: 33%%"/>
+                        <field name="kabupaten_id" options='{"no_open": True, "no_create": True}' class="oe_no_button" placeholder="Kabupaten" style="width: 32%%"/>
+                    </div>
+	           	</field>
+			</field>
+		</record>
+		
+	</data>
+</odoo>

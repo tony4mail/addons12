@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_nomor_faktur_pajak_tree" model="ir.ui.view">
+            <field name="name">nomor.faktur.pajak.tree</field>
+            <field name="model">nomor.faktur.pajak</field>
+            <field name="arch" type="xml">
+                <tree string="Nomor Faktur">
+                	<field name="type" invisible="1"/>
+                    <field name="name"/>
+					<field name="date_invoice"/>
+                    <field name="invoice_id"/>
+                    <field name="partner_id"/>
+                    <field name="amount_untaxed"/>
+					<field name="amount_tax"/>                    
+                    <field name="state"/>                    
+                </tree>
+            </field>
+        </record>
+        <record id="view_anomor_faktur_pajak_form" model="ir.ui.view">
+            <field name="name">nomor.faktur.pajak.form</field>
+            <field name="model">nomor.faktur.pajak</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Nomor Faktur">
+                	<header>
+                		 <button name="%(efaktur.action_faktur_pajak_inv_form)d" string="Set Invoice"
+		                    type="action" class="btn-primary"
+		                    context="{'type': type+'_invoice'}"
+		                    states="0,2"/>
+                		 <button name="action_hold" string="To Hold" type="object" class="btn-primary" confirm="If you hold this faktur pajak, you may use it again!" attrs="{'invisible': [('invoice_id','=',False)]}"/>
+                		 <button name="action_reset" string="Reset" type="object" confirm="If you reset this faktur pajak, you may use it again!" attrs="{'invisible': [('invoice_id','=',False)]}"/>
+                		 <field name="state" widget="statusbar" statusbar_visible="0,1" statusbar_colors='{"confirmed":"1"}' readonly="1"/>
+                	</header>
+                	<sheet>	
+                		<div> 
+                    		<span class="o_form_label">Faktur Pajak No</span>
+                			<h1 class="mt0">
+                            	<field name="name" class="oe_inline"/>
+                        	</h1>
+                   		</div>
+	                   	<group>
+		                    <group>
+		                       <field name="type" invisible="1"/>
+		                       <field name="kode_perusahaan"/>
+		                       <field name="jenis_faktur"/>
+		                       <field name="nomor_perusahaan" placeholder="000"/>
+		                       <field name="tahun_penerbit" placeholder="17"/>
+		                       <field name="nomor_urut" placeholder="00000001"/>
+		                       <field name="fp_company_id" groups="base.group_multi_company"/>
+		                    </group>
+		                    <group>
+		                       <field name="invoice_revisi_id"/>
+		                       <field name="partner_revisi_id"/>
+		                       <field name="invoice_id"/>
+		                       <field name="date_invoice"/>
+	                    	   <field name="partner_id"  context="{'show_address': 1}" options='{"always_reload": True}'/>
+		                       <field name="amount_untaxed"/>
+							   <field name="amount_tax"/>
+							   <field name="currency_id"/>
+		                    </group>
+	                    </group>	
+                    </sheet>
+	                <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/>
+	                    <field name="activity_ids" widget="mail_activity"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+                </form>
+            </field>
+        </record>
+        <record id="action_account_nomor_faktur_pajak" model="ir.actions.act_window">
+            <field name="name">Faktur Pajak Masukan</field>
+            <field name="res_model">nomor.faktur.pajak</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type', '=', 'in')]</field>
+            <field name="context">{'type':'in'}</field>
+        </record>
+         <record id="action_account_nomor_faktur_pajak_keluaran" model="ir.actions.act_window">
+            <field name="name">Faktur Pajak Keluaran</field>
+            <field name="res_model">nomor.faktur.pajak</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type', '=', 'out')]</field>
+            <field name="context">{'type':'out'}</field>
+        </record>
+        <menuitem id="faktur_pajak_menu" name="Faktur Pajak" parent="aos_base_account.menu_finance_taxes" 
+        	groups="aos_base_account.group_accounting_faktur_pajak" sequence="4"/>
+        <menuitem id="ad_menu_nomor_faktur_pajak_keluar" parent="faktur_pajak_menu" 
+        	action="action_account_nomor_faktur_pajak_keluaran"/>
+        <menuitem id="ad_menu_nomor_faktur_pajak_masuk" parent="faktur_pajak_menu" 
+        	action="action_account_nomor_faktur_pajak"/>
+    </data>
+</odoo>

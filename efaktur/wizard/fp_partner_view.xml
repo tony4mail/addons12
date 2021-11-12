@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_fp_partner_export_form" model="ir.ui.view">
+            <field name="name">fp.partner.export.form</field>
+            <field name="model">fp.partner.export</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="E-Faktur LT">
+                		<span class="o_form_label">All selected partner will be exported. You can able to modify them afterwards.</span>
+                		<a href="/efaktur/static/export/fp_partner.csv"><b>E-Faktur LT.csv</b></a>
+                    <footer>
+                        <button string="Export" name="action_export" default_focus="1" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="action_fp_partner_export" model="ir.actions.act_window">
+            <field name="name">E-Faktur LT</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fp.partner.export</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_fp_partner_export_form"/>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="base.model_res_partner" />
+        </record>
+        
+
+    </data>
+</odoo>

@@ -1,0 +1,126 @@
+<odoo>
+	<data>
+        <record id="view_account_invoice_filter_efaktur" model="ir.ui.view">
+            <field name="name">account.invoice.search</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+				<field name="user_id" position="after">
+					<field name="npwp_no"/>
+					<field name="nomor_faktur_id"/>
+				</field>
+				<filter name="paid" position="after">
+					<filter name="faktur" string="Faktur Pajak" domain="[('nomor_faktur_id', '!=', False)]"/>
+				</filter>
+            </field>
+        </record>  
+        
+        <record id="invoice_tree_efaktur" model="ir.ui.view">
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field eval="20" name="priority" />
+            <field name="arch" type="xml">
+				<field name="partner_id" position="after">
+					<field name="npwp_no"/>
+				</field>
+				<field name="number" position="after">
+					<field name="non_faktur_pajak" invisible="1"/>
+					<field name="nomor_faktur_id"/>
+					<field name="is_taxed" invisible="1"/>
+				</field>
+				<field name="amount_total_signed" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</field>
+				<!-- <field name="amount_total_signed" position="after">
+					<field name="amount_untaxed" sum="Total Untaxed"/>
+					<field name="amount_tax" sum="Total Taxes"/>
+				</field> -->
+            </field>
+        </record>
+		
+		<record id="view_invoice_form_aos_customer_accounting" model="ir.ui.view">
+            <field name="name">account.invoice.customer.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+            	<button name="action_invoice_draft" position="after">
+            		<button name="%(efaktur.action_invoice_faktur_pajak_form)d" string="Set Faktur Pajak"
+	                    type="action" attrs="{'invisible': [('nomor_faktur_id','!=',False)]}"/>
+		        </button>
+            	<!-- <xpath expr="/form/sheet/group/group[2]/div/field[@name='currency_id']" position="attributes">
+            		<attribute name="domain">[('visible','=',True)]</attribute>
+            	</xpath> -->
+            	<field name="partner_id" position="after">
+					<field name="npwp_no"/>
+					<field name="npwp_efaktur" invisible="1"/>
+				</field>
+				<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="after">
+					<field name="default_code" groups="base.group_no_one" invisible="1"/>
+	    		</xpath>
+            	<!-- <field name="user_id" position="after">
+                    <label string="Nomor Faktur"/>
+                    <div>
+                        <field name="code_transaction" nolabel="1" style="width: 12%%"/>
+                        <field name="nomor_faktur_id" nolabel="1" invisible="False" style="width: 75%%" domain="[('state','=','0'),('type','=','out')]" attrs="{'readonly': [('state','in',('open', 'proforma2', 'paid'))]}"/>
+                    </div>                    
+                </field> -->
+				<field name="user_id" position="after">
+					<field name="non_faktur_pajak" invisible="1"/>
+					<field name="nomor_faktur_id" readonly="1" attrs="{'invisible': [('non_faktur_pajak','=',True)]}" context="{'type': 'out'}"/>
+                    <!-- <span class="o_form_label" attrs="{'invisible': [('non_faktur_pajak','=',True)]}">Nomor Faktur</span>
+                    <div attrs="{'invisible': [('non_faktur_pajak','=',True)]}">
+                        <field name="code_transaction" nolabel="1" style="width: 12%%"/>
+                        <field name="nomor_faktur_id" nolabel="1" invisible="False" style="width: 75%%" domain="[('state','=','0'),('type','=','out')]" attrs="{'readonly': [('state','in',('open', 'proforma2', 'paid'))]}"/>
+                    </div> -->                    
+                </field>
+            </field>
+        </record>      
+        
+        <record id="invoice_supplier_tree_efaktur" model="ir.ui.view">
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+            <field eval="20" name="priority" />
+            <field name="arch" type="xml">
+				<field name="vendor_display_name" position="after">
+					<field name="npwp_no"/>
+				</field>
+				<field name="number" position="after">
+					<field name="nomor_faktur_id"/>
+				</field>
+				<field name="amount_total_signed" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</field>
+				<!-- <field name="amount_total_signed" position="after">
+					<field name="amount_untaxed" sum="Total Untaxed"/>
+					<field name="amount_tax" sum="Total Taxes"/>
+				</field> -->
+            </field>
+        </record>  
+         
+		<record id="view_invoice_form_aos_supplier_accounting" model="ir.ui.view">
+			<field name="name">account.invoice.supplier.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_supplier_form"/>
+			<field name="arch" type="xml">
+				<button name="action_invoice_draft" position="after">
+            		<button name="%(efaktur.action_invoice_faktur_pajak_form)d" string="Set Faktur Pajak"
+            			context="{'type': type}" type="action" attrs="{'invisible': [('nomor_faktur_id','!=',False)]}"/>
+		        </button>
+            	<!-- <xpath expr="/form/sheet/group/group[2]/field[@name='currency_id']" position="attributes">
+            		<attribute name="options">{'no_create': True}</attribute>
+            	</xpath> -->
+            	<field name="user_id" position="after">
+					<field name="non_faktur_pajak" invisible="1"/>
+					<field name="nomor_faktur_id" context="{'type': 'in'}"/>
+                    <!-- <span class="o_form_label" attrs="{'invisible': [('non_faktur_pajak','=',True)]}">Nomor Faktur</span>
+                    <div attrs="{'invisible': [('non_faktur_pajak','=',True)]}">
+                        <field name="code_transaction" nolabel="1" style="width: 12%%"/>
+                        <field name="nomor_faktur_id" nolabel="1" invisible="False" style="width: 75%%" domain="[('state','=','0'),('type','=','out')]" attrs="{'readonly': [('state','in',('open', 'proforma2', 'paid'))]}"/>
+                    </div>   -->                  
+                </field>
+			</field>
+		</record>
+
+	</data>
+</odoo>
+

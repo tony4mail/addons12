@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<!-- INVOICE -->
+        <record id="faktur_pajak_inv_form_on_inv" model="ir.ui.view">
+            <field name="name">Invoice</field>
+            <field name="model">faktur.pajak.inv</field>
+            <field name="arch" type="xml">
+                <form string="Invoice">
+                    <p class="oe_grey">
+                        Faktur Pajak will be updated with this invoice.
+                    </p>
+                    <group>
+                    	<field name="type" invisible="1"/>
+                    	<field name="load_faktur" invisible="{'invisible': [('type','!=','out_invoice')]}"/>
+                    </group>
+                    <field name="faktur_invoice_ids">
+                    	<tree string="Faktur Pajak" editable="bottom" create="false" delete="false">
+		                	<field name="type_invoice" invisible="1"/>
+		                	<field name="type_faktur" invisible="1"/>
+		                	<field name="company_id" invisible="1"/>
+		                    <field name="invoice_id" options="{'no_create': True}" domain="[('company_id','=',company_id),('type','=',type_invoice),('nomor_faktur_id','=',False),('amount_tax','&gt;',0)]"/>
+		                    <field name="faktur_id" context="{'type': type_faktur}" domain="[('fp_company_id','=',company_id),('type','=',type_faktur),('invoice_id','=',False),('state','in',('0','2'))]"/>
+		                </tree>
+                    </field>                         
+                    <footer>
+                    	<button string="Add Faktur Pajak" name="change_faktur_button" type="object" class="btn-primary"/>
+                        <!-- <button string="Get Faktur Each" name="get_faktur_button" type="object" class="btn-primary"/> -->
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_invoice_faktur_pajak_form" model="ir.actions.act_window">
+            <field name="name">Set Faktur Pajak</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">faktur.pajak.inv</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="faktur_pajak_inv_form_on_inv"/>
+            <field name="binding_model_id" ref="account.model_account_invoice" />
+        </record>
+        
+        <!-- FAKTUR PAJAK -->
+        <record id="faktur_pajak_inv_form_on_fp" model="ir.ui.view">
+            <field name="name">Invoice</field>
+            <field name="model">faktur.pajak.inv</field>
+            <field name="arch" type="xml">
+                <form string="Invoice">
+                    <p class="oe_grey">
+                        Invoice will be updated with this faktur pajak.
+                    </p>
+                    <field name="faktur_invoice_ids">
+                    	<tree string="Faktur Pajak" editable="bottom" create="false" delete="false">
+		                	<field name="type_invoice" invisible="1"/>
+		                	<field name="type_faktur" invisible="1"/>
+		                	<field name="company_id" invisible="1"/>
+		                    <field name="faktur_id" options="{'no_create': True}" domain="[('fp_company_id','=',company_id),('type','=',type_faktur),('invoice_id','=',False),('state','in',('0','2'))]"/>
+		                    <field name="invoice_id" options="{'no_create': True}" domain="[('company_id','=',company_id),('type','=',type_invoice),('nomor_faktur_id','=',False),('amount_tax','&gt;',0)]"/>
+		                </tree>
+                    </field>                    
+                    <footer>
+                    	<button string="Add Invoice" name="change_faktur_button" type="object" class="btn-primary"/>
+                        <!-- <button string="Add Invoice and Validate" name="change_faktur_button" type="object" class="btn-primary"/> -->
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_faktur_pajak_inv_form" model="ir.actions.act_window">
+            <field name="name">Set Invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">faktur.pajak.inv</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="faktur_pajak_inv_form_on_fp"/>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="efaktur.model_nomor_faktur_pajak" />
+        </record>
+        
+
+</odoo>
